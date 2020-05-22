@@ -15,43 +15,48 @@ class Game:
     def deck_for_game(self):
         theDeck = Deck()
         theDeck.create_deck()
-        myDeck = theDeck.fullDeck
-        return myDeck
+        return theDeck
+        
 
 
 
     def game_procedure(self):
         gameDeck = self.deck_for_game()
+        lenofGameDeck = len(gameDeck.fullDeck)
         player1 = self.players[0]
         count = 0
-        for card in gameDeck:
+        
+        while lenofGameDeck >= 26:
+            card = gameDeck.pull_card()
             player1.cards.append(card)
-            count += 1
-            if count > 26:
-                break
-        for card in gameDeck:
+            lenofGameDeck -= 1
+        while lenofGameDeck > 0:
+            card = gameDeck.pull_card()
             self.computer.cards.append(card)
+            lenofGameDeck -= 1
 
-        player1CardLen = len(player1.cards)
-        compCardLen = len(self.computer.cards)
     
-        while player1CardLen > 0 and compCardLen > 0:
+        while len(player1.cards) > 0 and len(self.computer.cards) > 0:
             p1Card = player1.pull_card()
             compCard = self.computer.pull_card()
             if p1Card.value > compCard.value:
-                playerWins = player1.win
-                playerWins += 1
+                player1.win += 1
             else:
-                computerWins = compCard.win
-                computerWins += 1
+                self.computer.win += 1
 
-            
+        print("{} Wins: {}".format(player1.name, player1.win))
+        print("Computer Wins: {}".format(self.computer.win))
+        if player1.win > self.computer.win:
+            print("{} Wins Game! ".format(player1.name))
+        else:
+            print("Computer Wins!")
         
-        
+        print("------------------------")
+        print("Game Over!")
     
 
 
 
 game = Game()
-game.add_player("matt")
+game.add_player("Joe")
 game.game_procedure()
